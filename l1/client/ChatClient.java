@@ -1,12 +1,9 @@
-package l1.client;
+//package l1.client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
+//import l1.client.Sender;
 /**
  * This is the chat client program. Type "exit" to exit the program
  */
@@ -73,6 +70,40 @@ public class ChatClient {
                     System.out.println("Error reading from server: " + e.getMessage());
                     break;
                 }
+            }
+        }
+    }
+    public class Sender extends Thread {
+        private Socket outSock;
+        private PrintWriter writer;
+        private ChatClient client;
+
+        public Sender(Socket socket, ChatClient client) {
+            this.outSock = socket;
+            this.client = client;
+            try {
+                OutputStream out = outSock.getOutputStream();
+                writer = new PrintWriter(out, true);
+            } catch (IOException e) {
+                System.out.println("Error creating output stream" + e.getMessage());
+            }
+        }
+
+        @Override
+        public void run() {
+            String text;
+            Console reader = System.console();
+            String user = client.getUserName();
+            writer.println(user);
+
+            do {
+                text = reader.readLine("[" + user + "]: ");
+                writer.println(text);
+            } while (!text.equals("exit"));
+            try {
+                outSock.close();
+            } catch (IOException e) {
+                System.out.println("Error writing to server" + e.getMessage());
             }
         }
     }

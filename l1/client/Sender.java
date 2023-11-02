@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-
 public class Sender extends Thread {
     private Socket outSock;
     private PrintWriter writer;
