@@ -3,8 +3,8 @@
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Scanner;
-//import l1.client.Sender;
+
+
 /**
  * This is the chat client program. Type "exit" to exit the program
  */
@@ -40,10 +40,10 @@ public class ChatClient {
         try {
             Socket socket = new Socket(hostname, port);
             System.out.println("Connected to chatserver");
-            Receiver reader = new Receiver(socket);
-            //Sender sender = new Sender(socket, this);
+            Receiver reader = new Receiver(socket); //Tread for reading responses from server
+            Sender sender = new Sender(socket);//Tread for writing responses to server
             new Thread(reader).start();
-            new Sender(socket, this).start();
+            new Thread(sender).start();
         } catch (UnknownHostException e) {
             System.out.println("Server not found: " + e.getMessage());
         } catch (IOException e) {
@@ -66,29 +66,26 @@ public class ChatClient {
 
             while (true) {
                 try {
-                    System.out.println("\n" + bufRead.readLine());
-                    System.out.print("[" + username + "]: ");
+                    System.out.println("\n" + bufRead.readLine()); //reading response from server
+                    System.out.print(username + ": ");//Printing username to terminal
                 } catch (IOException e) {
                     if (e.getMessage().equals("Socket closed")) {
                         System.out.println("Exiting chatserver");
-                    }
-                    else System.out.println("Error reading from server: " + e.getMessage());
-
-                    //System.exit(1);
+                    } else System.out.println("Error reading from server: " + e.getMessage());
                     break;
                 }
             }
 
         }
     }
-    public class Sender extends Thread {
-        private Socket outSock;
-        private PrintWriter writer;
-        private ChatClient client;
 
-        public Sender(Socket socket, ChatClient client) {
+    public class Sender implements Runnable {
+        private Socket outSock;
+        private PrintWriter writer; //for sending messages to server
+
+        public Sender(Socket socket) {
             this.outSock = socket;
-            this.client = client;
+
             try {
                 OutputStream out = outSock.getOutputStream();
                 writer = new PrintWriter(out, true);
@@ -99,23 +96,17 @@ public class ChatClient {
 
         @Override
         public void run() {
-            String text = "";
-            Console reader = System.console();
-            /*BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));*/
+            String text;
+            Console reader = System.console(); //reading input from user
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             //Scanner reader = new Scanner(System.in);
-            String user = client.getUserName();
-            writer.println(user);
-
+            writer.println(username);
             do {
+                text = reader.readLine(username + ": ");
                 //text = reader.nextLine();
-                text = reader.readLine("[" + user + "]: ");
-                /*try {
-                    text = reader.readLine();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }*/
-                writer.println(text);
-            } while (!text.equals("exit"));
+                writer.println(text); //Send input from user to server
+            } while (text != null && !text.equals("exit"));
+
             try {
                 outSock.close();
             } catch (IOException e) {
