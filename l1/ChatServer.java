@@ -30,10 +30,6 @@ public class ChatServer {
         }
     }
 
-    private static boolean number(String str) {
-        return str != null && str.matches("[0-9]+");
-    }
-
     private static class ClientHandler extends Thread {
         private final Socket clientSocket;
         private PrintWriter writer;
@@ -61,6 +57,7 @@ public class ChatServer {
                 } while (!line.equals("exit"));
                 //tar bort användaren när denna avslutar med frasen "exit"
                 clientHandlers.remove(this);
+                System.out.println("Removed client " + username);
                 clientSocket.close();
                 //kanske kan ha något server meddelande om att denna user har avslutat
 
@@ -70,7 +67,7 @@ public class ChatServer {
                 //updateClients(clientSocket.getInputStream().readAllBytes(), this);
 
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
         }

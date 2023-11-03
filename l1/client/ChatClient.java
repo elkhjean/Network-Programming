@@ -3,6 +3,7 @@
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 //import l1.client.Sender;
 /**
  * This is the chat client program. Type "exit" to exit the program
@@ -62,15 +63,22 @@ public class ChatClient {
 
         @Override
         public void run() {
+
             while (true) {
                 try {
                     System.out.println("\n" + bufRead.readLine());
-                    System.out.println("[" + username + "]: ");
+                    System.out.print("[" + username + "]: ");
                 } catch (IOException e) {
-                    System.out.println("Error reading from server: " + e.getMessage());
+                    if (e.getMessage().equals("Socket closed")) {
+                        System.out.println("Exiting chatserver");
+                    }
+                    else System.out.println("Error reading from server: " + e.getMessage());
+
+                    //System.exit(1);
                     break;
                 }
             }
+
         }
     }
     public class Sender extends Thread {
@@ -91,13 +99,21 @@ public class ChatClient {
 
         @Override
         public void run() {
-            String text;
+            String text = "";
             Console reader = System.console();
+            /*BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));*/
+            //Scanner reader = new Scanner(System.in);
             String user = client.getUserName();
             writer.println(user);
 
             do {
+                //text = reader.nextLine();
                 text = reader.readLine("[" + user + "]: ");
+                /*try {
+                    text = reader.readLine();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }*/
                 writer.println(text);
             } while (!text.equals("exit"));
             try {
