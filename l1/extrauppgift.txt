@@ -1,0 +1,11 @@
+- Vad betyder TCP-headers i datagrammen?
+
+Varje segment består av en header följt av data. I headern finns information för att segmentet ska nå destinationen. Avsändaraddress, Destinationsaddress, typ av innehåll (protokoll, TCP i detta fall), datans storlek och checksum för felkontroll.
+
+- Vad betyder flaggorna ACK/SYN/SEQ/PSH/FIN?
+
+ACK: Acknowledgement flag, bekräftar att föregående segment har mottagits
+SYN: Initierar TCP 3 way handshake för TCP connection. Syn flaggan indikerar att detta är det första segmentet i en ny TCP connection
+SEQ: Sekvensnummret för segmentet
+PSH: Säger att datan ska skickas direkt till applikationslagret utan att buffras 
+FIN: Avslutar en TCP session.

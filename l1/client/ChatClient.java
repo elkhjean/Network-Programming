@@ -12,7 +12,7 @@ public class ChatClient {
     private final String hostname;
     private final int port;
 
-    private String username; //kanske kan ha så man kan urskilja vem som skriver vad.
+    private String username;
 
     public ChatClient(String host, int port, String user) {
         this.hostname = host;
@@ -20,9 +20,6 @@ public class ChatClient {
         this.username = user;
     }
 
-    // Sätt igång tråd att lyssna på socket efter msg
-    // vänta på input från användare
-    // skriv till server genom socket
     public static void main(String[] args) {
         if (args.length < 3) System.out.println("Usage: <hostname> <port> <username> ");
         String host = args[0];
