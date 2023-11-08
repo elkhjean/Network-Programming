@@ -3,6 +3,7 @@
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 
 
 /**
@@ -11,7 +12,6 @@ import java.net.UnknownHostException;
 public class ChatClient {
     private final String hostname;
     private final int port;
-
     private String username;
 
     public ChatClient(String host, int port, String user) {
@@ -94,16 +94,16 @@ public class ChatClient {
         @Override
         public void run() {
             String text;
-            Console reader = System.console(); //reading input from user
+           // Console reader = System.console(); //reading input from user
             //BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            //Scanner reader = new Scanner(System.in);
+            Scanner reader = new Scanner(System.in, "Cp850");
             writer.println(username);
             do {
-                text = reader.readLine(username + ": ");
-                //text = reader.nextLine();
+                //text = reader.readLine(username + ": ");
+                text = reader.nextLine();
                 writer.println(text); //Send input from user to server
             } while (text != null && !text.equals("exit"));
-
+            reader.close();
             try {
                 outSock.close();
             } catch (IOException e) {
