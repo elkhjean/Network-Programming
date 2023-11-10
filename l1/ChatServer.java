@@ -1,29 +1,32 @@
 //package l1;
 
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
 /**
- * This is the chatserver, Starts with the argument of a port number to host it from
+ * This is the chatserver, Starts with the argument of a port number to host it
+ * from
  */
 public class ChatServer {
-    private static ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
+    private static final ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
 
     public static void main(String[] args) throws IOException {
 
-        if (args.length < 1) System.out.println("Usage: Start by providing a port number <port>");
+        if (args.length < 1)
+            System.out.println("Usage: Start by providing a port number <port>");
         int listenPort = Integer.parseInt(args[0]);
 
         try (ServerSocket welcomeSocket = new ServerSocket(listenPort)) {
-            System.out.println("Started chat server on port " + listenPort); //Just to see that it's working'
+            System.out.println("Started chat server on port " + listenPort); // Just to see that it's working'
             while (true) {
                 Socket client = welcomeSocket.accept();
-                //System.out.println("New user connected");
+                // System.out.println("New user connected");
                 ClientHandler t = new ClientHandler(client);
-                clientHandlers.add(t);
+                synchronized (clientHandlers) {
+                    clientHandlers.add(t);
+                }
                 t.start();
 
             }
@@ -52,28 +55,33 @@ public class ChatServer {
                 String line = "";
                 String username = reader.readLine();
                 String server = "New user connected: " + username;
-                writer.println(server); //Send response to client
-                updateClients(server, this); //Updates all clients
+                writer.println(server); // Send response to client
+                updateClients(server, this); // Updates all clients
                 while (!line.equals("exit")) {
                     line = reader.readLine();
                     server = username + ": " + line;
-                    updateClients(server, this); //Updates all clients
+                    updateClients(server, this); // Updates all clients
                 }
-                //tar bort användaren när denna avslutar med frasen "exit"
-                clientHandlers.remove(this);
+                // tar bort användaren när denna avslutar med frasen "exit"
+                synchronized (clientHandlers) {
+                    clientHandlers.remove(this);
+                }
                 System.out.println("Removed client " + username);
                 updateClients(username + " left server", this);
                 clientSocket.close();
 
             } catch (IOException e) {
-                //e.printStackTrace();
+                // e.printStackTrace();
             }
 
         }
 
         public void updateClients(String msg, ClientHandler user) throws IOException {
-            for (ClientHandler ch : clientHandlers) { //Sends message to all other connected users
-                if (ch != user) ch.writeMessage(msg);
+            synchronized (clientHandlers) {
+                for (ClientHandler ch : clientHandlers) { // Sends message to all other connected users
+                    if (ch != user)
+                        ch.writeMessage(msg);
+                }
             }
         }
 
