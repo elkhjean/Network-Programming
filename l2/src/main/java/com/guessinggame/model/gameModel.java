@@ -22,15 +22,15 @@ public class gameModel {
 
     public String compareGuess(int guess) {
         this.numberOfGuesses++;
-        if (guess < secretNumber) {
+        System.out.println("secret number: " + secretNumber);
+        if (guess == secretNumber) {
+            this.winStatus = true;
+            return "You made it!!!";
+        } else if (guess < secretNumber) {
             return "Nope, guess higher. You have made " + this.numberOfGuesses + " guess(es)";
-        }
-        if (guess > secretNumber) {
+        } else {
             return "Nope, guess lower. You have made " + this.numberOfGuesses + " guess(es)";
         }
-        this.winStatus = true;
-        return "You made it!!!";
-
     }
 
     public String getSessionId() {

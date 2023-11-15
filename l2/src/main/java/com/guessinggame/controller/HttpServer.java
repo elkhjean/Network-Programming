@@ -29,6 +29,7 @@ public class HttpServer {
             synchronized (gameSessions) {
                 for (gameModel session : gameSessions) {
                     String gameSessionId = session.getSessionId();
+                    System.out.println("cookie: " + gameSessionId);
                     if (gameSessionId.equals(sessionId))
                         return session;
                 }

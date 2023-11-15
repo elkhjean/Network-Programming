@@ -1,11 +1,6 @@
 package com.guessinggame.controller;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.*;
 
@@ -23,15 +18,15 @@ public class ClientHandler implements Runnable {
     @Override
     public void run() {
         try {
+
             BufferedReader reader = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 
             boolean keepAlive = true;
 
             while (keepAlive) {
                 HttpRequest request = parseRequest(reader);
-                if (request == null)
-                    break;
-                else if (request.method.equalsIgnoreCase("GET")) {
+
+                if (request.method.equalsIgnoreCase("GET")) {
                     handleGetRequest(request);
                 } else if (request.method.equalsIgnoreCase("POST")) {
                     handlePostRequest(request);
@@ -49,12 +44,15 @@ public class ClientHandler implements Runnable {
     }
 
     private void handlePostRequest(HttpRequest request) throws IOException {
-        String gameResponse = this.gameInstance.compareGuess(Integer.valueOf(request.body));
+        String[] params = request.body.split("=");
+        this.gameInstance = HttpServer.getSession(request.getHeader("cookie"));
+        String gameResponse = this.gameInstance.compareGuess(Integer.parseInt(params[1]));
         String htmlResponse = gameView.getGamePage(gameResponse);
         httpRespond(htmlResponse, request);
     }
 
     private void handleGetRequest(HttpRequest request) throws IOException {
+
         if (!"/favicon.ico".equals(request.path)) { // Ignore any additional request to retrieve the bookmark-icon.
             this.gameInstance = HttpServer.getSession(request.getHeader("cookie"));
             String htmlResponse = gameView.getGamePage();
@@ -74,7 +72,8 @@ public class ClientHandler implements Runnable {
         out.println("Content-Length: " + htmlResponse.length());
 
         // Check if a new game session was created and set cookie if needed
-        if (request.getHeader("cookie") == null) {
+        //And check if the cookie has expired
+        if (request.getHeader("cookie") == null || !Objects.equals(request.getHeader("cookie"), gameInstance.getSessionId())) {
             out.println("Set-Cookie: sessionId=" + gameInstance.getSessionId());
         }
 
@@ -92,8 +91,11 @@ public class ClientHandler implements Runnable {
         HttpRequest request = new HttpRequest();
 
         // Read first first line (request line) of http request
-        String line = reader.readLine();
+        while (!reader.ready()) {
 
+        }
+        String line = reader.readLine();
+        //debug System.out.println("Request line: " + line);
         // Parse request line to extract parameters
         String[] requestLine = line.split(" ");
         request.method = requestLine[0];
