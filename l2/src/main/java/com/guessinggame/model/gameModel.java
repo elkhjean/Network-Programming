@@ -22,7 +22,6 @@ public class gameModel {
 
     public String compareGuess(int guess) {
         this.numberOfGuesses++;
-        System.out.println("secret number: " + secretNumber);
         if (guess == secretNumber) {
             this.winStatus = true;
             return "You made it!!!";

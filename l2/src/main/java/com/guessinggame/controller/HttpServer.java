@@ -1,12 +1,13 @@
 package com.guessinggame.controller;
 
+import com.guessinggame.model.gameModel;
+
 import java.io.IOException;
-import java.net.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Base64;
-
-import com.guessinggame.model.gameModel;
 
 public class HttpServer {
     static final int port = 8080;
@@ -29,7 +30,6 @@ public class HttpServer {
             synchronized (gameSessions) {
                 for (gameModel session : gameSessions) {
                     String gameSessionId = session.getSessionId();
-                    System.out.println("cookie: " + gameSessionId);
                     if (gameSessionId.equals(sessionId))
                         return session;
                 }

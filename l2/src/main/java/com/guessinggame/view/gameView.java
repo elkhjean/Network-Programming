@@ -1,7 +1,5 @@
 package com.guessinggame.view;
 
-import com.guessinggame.model.gameModel;
-
 public class gameView {
 
     public static String getGamePage() {
