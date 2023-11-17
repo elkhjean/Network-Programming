@@ -14,7 +14,7 @@ public class WebClient {
             HttpURLConnection h;
             InputStream is;
             //u = new URL("https://www.kth.se");
-            u = new URL("https://127.0.0.1:8080");
+            u = new URL("http://127.0.0.1:8080");
 
             h = (HttpURLConnection) u.openConnection();
             h.setRequestProperty("Cookie", "SESSIONID=3242342343243;exp");

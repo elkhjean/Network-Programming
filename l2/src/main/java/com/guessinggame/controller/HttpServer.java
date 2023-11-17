@@ -45,6 +45,12 @@ public class HttpServer {
         return newGame;
     }
 
+    static void removeGameSession(gameModel gameSession) {
+        synchronized (gameSessions) {
+            gameSessions.remove(gameSession);
+        }
+    }
+
     private static String generateCookie() {
         byte[] cookieBytes = new byte[16];
         SecureRandom secRand = new SecureRandom();

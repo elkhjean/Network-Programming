@@ -26,21 +26,12 @@ public class ClientHandler implements Runnable {
 
             BufferedReader reader = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
 
-            boolean keepAlive = true;
+            HttpRequest request = parseRequest(reader);
 
-            while (keepAlive) {
-                HttpRequest request = parseRequest(reader);
-
-                if (request.method.equalsIgnoreCase("GET"))
-                    handleGetRequest(request);
-                else if (request.method.equalsIgnoreCase("POST"))
-                    handlePostRequest(request);
-                else //Close the connection for other types of requests
-                    break;
-
-                String connectionHeader = request.getHeader("Connection");
-                keepAlive = (connectionHeader != null && connectionHeader.equalsIgnoreCase("keep-alive"));
-            }
+            if (request.method.equalsIgnoreCase("GET"))
+                handleGetRequest(request);
+            else if (request.method.equalsIgnoreCase("POST"))
+                handlePostRequest(request);
 
             connectionSocket.close();
 
@@ -56,6 +47,9 @@ public class ClientHandler implements Runnable {
         String gameResponse = this.gameInstance.compareGuess(params[1]);
         String htmlResponse = gameView.getGamePage(gameResponse);
         httpRespond(htmlResponse, request);
+        if(this.gameInstance.getWinStatus()){
+            HttpServer.removeGameSession(this.gameInstance);
+        }
     }
 
     private void handleGetRequest(HttpRequest request) throws IOException {
@@ -78,8 +72,9 @@ public class ClientHandler implements Runnable {
         out.println("Content-Length: " + htmlResponse.length());
 
         // Check if a new game session was created and set cookie if needed
-        //And check if the cookie has expired
-        if (request.getHeader("cookie") == null || !Objects.equals(request.getHeader("cookie"), gameInstance.getSessionId())) {
+        // And check if the cookie has expired
+        if (request.getHeader("cookie") == null
+                || !Objects.equals(request.getHeader("cookie"), gameInstance.getSessionId())) {
             out.println("Set-Cookie: sessionId=" + gameInstance.getSessionId());
         }
 
@@ -97,23 +92,21 @@ public class ClientHandler implements Runnable {
         HttpRequest request = new HttpRequest();
 
         // Read first first line (request line) of http request
-        while (!reader.ready()) {
 
-        }
         String line = reader.readLine();
-        //System.out.println("Request line: " + line);
+        // System.out.println("Request line: " + line);
         // Parse request line to extract parameters
         String[] requestLine = line.split(" ");
         request.method = requestLine[0];
         request.path = requestLine[1];
         request.version = requestLine[2];
-        if ("/favicon.ico".equals(request.path)) //ignoring the favicon icon.
+        if ("/favicon.ico".equals(request.path)) // ignoring the favicon icon.
             return request;
 
         // Parse each remaining line of http request until an empty line is encountered
         // and extract headers. If cookie, get only the sessionID part
         while (!(line = reader.readLine()).isEmpty()) {
-            //System.out.println("line: " +  line);
+            // System.out.println("line: " + line);
             String[] headerLine = line.split(":", 2);
             if (headerLine[0].trim().equalsIgnoreCase("cookie"))
                 headerLine[1] = headerLine[1].split("=", 2)[1];
