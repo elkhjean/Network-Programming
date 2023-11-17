@@ -38,7 +38,6 @@ public class WebClient {
             int guess = generateRandomGuess(min, max);
             String response = makeGuess(cookie, guess);
             numberOfGuesses++;
-            System.out.println("guess " + guess);
 
             if (response.contains("lower")) {
                 max = guess - 1;
@@ -106,8 +105,6 @@ public class WebClient {
     }
 
     private int generateRandomGuess(int min, int max) {
-        System.out.println("min " + min);
-        System.out.println("max " + max);
         if(max < 1)
             max = 1;
         return random.nextInt((max - min) + 1) + min;
