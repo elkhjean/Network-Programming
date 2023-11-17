@@ -17,7 +17,7 @@ public class gameModel {
 
     private int generateRandomNumber() {
         Random rn = new Random();
-        return rn.nextInt(1, 100);
+        return rn.nextInt(100) + 1;
     }
 
     public String compareGuess(String guessed) {
@@ -27,7 +27,7 @@ public class gameModel {
         } catch (NumberFormatException ignored) {
 
         }
-        if (guess == -1) {
+        if (guess < 1|| guess >100) {
             return "Bad input guess is not an integer between 1 - 100";
         }
         this.numberOfGuesses++;

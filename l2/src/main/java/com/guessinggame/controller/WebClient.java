@@ -4,117 +4,113 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Random;
 
 public class WebClient {
-    String cookie = "";
-    String method = "GET";
-    int numberOfguesses = 0;
-    int numberOfgames = 0;
-    int guess = 0;
-    int min = 1;
-    int max = 100;
-    String url = "http://127.0.0.1:8080";
+    private static final String URL_STRING = "http://127.0.0.1:8080";
+    private static final int TOTAL_GAMES = 100;
+    private static final Random random = new Random();
 
     public static void main(String[] args) {
         WebClient client = new WebClient();
-        client.init();
+        client.playMultipleGames(TOTAL_GAMES);
     }
 
-    private void init() {
-        URL u;
-        try {
-            u = new URL(url);
-            connect(u);
-        } catch (MalformedURLException e) {
-            System.out.println("Connection error: " + e.getMessage());
+    private void playMultipleGames(int totalGames) {
+        int totalGuesses = 0;
+        for (int i = 0; i < totalGames; i++) {
+            totalGuesses += playSingleGame();
         }
-
+        double averageGuesses = (double) totalGuesses / totalGames;
+        System.out.println("Average number of guesses: " + averageGuesses);
     }
 
-    private void connect(URL u) {
-        try {
-            HttpURLConnection h;
-            h = (HttpURLConnection) u.openConnection();
-            h.setRequestMethod(method);
-            h.connect();
-            response(h);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+    private int playSingleGame() {
+        int numberOfGuesses = 0;
+        int min = 1;
+        int max = 100;
+        String cookie = initializeGame();
 
-    public void response(HttpURLConnection h) {
-        cookie = h.getHeaderField("Set-cookie");
-        Random rand = new Random();
-        guess = rand.nextInt(100);
-        String gues = "guess=" + String.valueOf(guess);
-        method = "POST";
-        play(gues);
+        while (true) {
+            int guess = generateRandomGuess(min, max);
+            String response = makeGuess(cookie, guess);
+            numberOfGuesses++;
+            System.out.println("guess " + guess);
 
-    }
-
-    private void play(String guess) {
-        try {
-            URL u;
-            u = new URL(url);
-            HttpURLConnection h;
-
-            h = (HttpURLConnection) u.openConnection();
-            h.setRequestProperty("Cookie", cookie);
-            h.setRequestMethod(method);
-
-            h.setDoOutput(true);
-            h.getOutputStream().write(guess.getBytes());
-            h.connect();
-            checkGuess(h);
-
-
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void checkGuess(HttpURLConnection h) {
-        InputStream is;
-        try {
-            is = h.getInputStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            String str;
-            Random rand = new Random();
-            numberOfguesses++;
-            while ((str = br.readLine()) != null) {
-                if (str.contains("lower")) {
-                    max = guess;
-                    guess = rand.nextInt(min, max);
-                } else if (str.contains("higher")) {
-                    min = guess + 1;
-                    if (min == max)
-                        min--;
-                    guess = rand.nextInt(min, max);
-                } else if (str.contains("You")) {
-                    numberOfgames++;
-                    if (numberOfgames == 100) {
-                        System.out.println("Average number of guesses " + (double) numberOfguesses / numberOfgames);
-                        System.exit(0);
-                    }
-                    cookie = "";
-                    method = "GET";
-                    min = 1;
-                    max = 100;
-                    init();
-                }
+            if (response.contains("lower")) {
+                max = guess - 1;
+            } else if (response.contains("higher")) {
+                min = guess + 1;
+            } else if (response.contains("You")) {
+                return numberOfGuesses;
             }
-            method = "POST";
-            play("guess=" + String.valueOf(guess));
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
+    }
 
+    private String initializeGame() {
+        try {
+            HttpURLConnection connection = createConnection(URL_STRING, "GET", null);
+            String cookie = connection.getHeaderField("Set-cookie");
+            connection.disconnect();
+            return cookie;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to initialize game: " + e.getMessage(), e);
+        }
+    }
+
+    private String makeGuess(String cookie, int guess) {
+        try {
+            String body = "guess=" + guess;
+            HttpURLConnection connection = createConnection(URL_STRING, "POST", cookie);
+            writeBody(connection, body);
+
+            String response = readResponse(connection);
+            connection.disconnect();
+            return response;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to make guess: " + e.getMessage(), e);
+        }
+    }
+
+    private HttpURLConnection createConnection(String urlString, String method, String cookie) throws IOException {
+        URL url = new URL(urlString);
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod(method);
+        if (cookie != null) {
+            connection.setRequestProperty("Cookie", cookie);
+        }
+        return connection;
+    }
+
+    private void writeBody(HttpURLConnection connection, String body) throws IOException {
+        connection.setDoOutput(true);
+        try (OutputStream os = connection.getOutputStream()) {
+            os.write(body.getBytes());
+            os.flush();
+        }
+    }
+
+    private String readResponse(HttpURLConnection connection) throws IOException {
+        try (InputStream is = connection.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                response.append(line);
+            }
+            return response.toString();
+        }
+    }
+
+    private int generateRandomGuess(int min, int max) {
+        System.out.println("min " + min);
+        System.out.println("max " + max);
+        if(max < 1)
+            max = 1;
+        return random.nextInt((max - min) + 1) + min;
     }
 
 }
