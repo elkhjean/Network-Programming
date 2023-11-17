@@ -17,7 +17,7 @@ public class gameModel {
 
     private int generateRandomNumber() {
         Random rn = new Random();
-        return rn.nextInt(100);
+        return rn.nextInt(1, 100);
     }
 
     public String compareGuess(String guessed) {
