@@ -20,7 +20,16 @@ public class gameModel {
         return rn.nextInt(100);
     }
 
-    public String compareGuess(int guess) {
+    public String compareGuess(String guessed) {
+        int guess = -1;
+        try {
+            guess = Integer.parseInt(guessed);
+        } catch (NumberFormatException ignored) {
+
+        }
+        if (guess == -1) {
+            return "Bad input guess is not an integer between 1 - 100";
+        }
         this.numberOfGuesses++;
         if (guess == secretNumber) {
             this.winStatus = true;
