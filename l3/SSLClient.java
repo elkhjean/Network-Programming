@@ -41,7 +41,9 @@ public class SSLClient {
         writer.println("a001 LOGIN " + new String(console.readLine("Username: ")) + " "
                 + new String(console.readPassword("Password: ")));
         writer.println("a002 select inbox");
-        writer.println("a003 fetch 1 full");
+        writer.println("a003 fetch 1 body[header]");
+        writer.println("a004 fetch 1 body[text]");
+        writer.println("a005 logout");
         writer.flush();
 
         try {
