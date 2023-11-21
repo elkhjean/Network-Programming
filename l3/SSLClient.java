@@ -37,13 +37,15 @@ public class SSLClient {
             System.out.println(e.getMessage());
         }
 
+        int msgNum = 0;
         Console console = System.console();
-        writer.println("a001 LOGIN " + new String(console.readLine("Username: ")) + " "
+        writer.println(msgNum++ + " LOGIN " + new String(console.readLine("Username: ")) + " "
                 + new String(console.readPassword("Password: ")));
-        writer.println("a002 select inbox");
-        writer.println("a003 fetch 1 body[header]");
-        writer.println("a004 fetch 1 body[text]");
-        writer.println("a005 logout");
+        writer.println("a" + msgNum++ +" select inbox");
+        writer.println("a" +msgNum++ +" search all");
+        writer.println("a" +msgNum++ +" fetch 1 body[header]");
+        writer.println("a" +msgNum++ +" fetch 1 body[text]");
+        writer.println("a" +msgNum++ +" logout");
         writer.flush();
 
         try {
