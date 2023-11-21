@@ -117,8 +117,10 @@ public class SMTPClient {
                     out.println(".");
                     out.flush();
                     line = in.readLine();
-                    System.out.println("Data sent reply " + line);
-                    System.out.println("Email sent successfully!");
+                    if (line.contains("Ok"))
+                        System.out.println("Email sent successfully! " + line);
+                    else
+                        System.out.println("Error sending email! " + line);
                 } else {
                     System.out.println("Server does not support STARTTLS.");
                 }
