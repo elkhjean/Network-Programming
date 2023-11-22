@@ -36,8 +36,7 @@ public class ClientHandler implements Runnable {
             connectionSocket.close();
 
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Exception reading input stream: " + e.getMessage());
         }
     }
 
@@ -47,7 +46,7 @@ public class ClientHandler implements Runnable {
         String gameResponse = this.gameInstance.compareGuess(params[1]);
         String htmlResponse = gameView.getGamePage(gameResponse);
         httpRespond(htmlResponse, request);
-        if(this.gameInstance.getWinStatus()){
+        if (this.gameInstance.getWinStatus()) {
             HttpServer.removeGameSession(this.gameInstance);
         }
     }
@@ -94,7 +93,6 @@ public class ClientHandler implements Runnable {
         // Read first first line (request line) of http request
 
         String line = reader.readLine();
-        // System.out.println("Request line: " + line);
         // Parse request line to extract parameters
         String[] requestLine = line.split(" ");
         request.method = requestLine[0];
@@ -106,7 +104,6 @@ public class ClientHandler implements Runnable {
         // Parse each remaining line of http request until an empty line is encountered
         // and extract headers. If cookie, get only the sessionID part
         while (!(line = reader.readLine()).isEmpty()) {
-            // System.out.println("line: " + line);
             String[] headerLine = line.split(":", 2);
             if (headerLine[0].trim().equalsIgnoreCase("cookie"))
                 headerLine[1] = headerLine[1].split("=", 2)[1];
