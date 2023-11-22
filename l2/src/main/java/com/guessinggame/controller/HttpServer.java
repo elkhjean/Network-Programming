@@ -10,18 +10,22 @@ import java.util.ArrayList;
 import java.util.Base64;
 
 public class HttpServer {
-    static final int port = 8080;
+    static int port = 8080;
     static ArrayList<gameModel> gameSessions = new ArrayList<>();
     int cookieCtr;
 
     public static void main(String[] args) throws IOException {
+        if (args.length == 1)
+            port = Integer.parseInt(args[0]);
 
-        ServerSocket welcomeSocket = new ServerSocket(port);
+        try (ServerSocket welcomeSocket = new ServerSocket(port)) {
+            System.out.println("Starting http server on port " + port);
 
-        while (true) {
-            Socket connectionSocket = welcomeSocket.accept();
-            Runnable clientHandler = new ClientHandler(connectionSocket);
-            new Thread(clientHandler).start();
+            while (true) {
+                Socket connectionSocket = welcomeSocket.accept();
+                Runnable clientHandler = new ClientHandler(connectionSocket);
+                new Thread(clientHandler).start();
+            }
         }
     }
 
