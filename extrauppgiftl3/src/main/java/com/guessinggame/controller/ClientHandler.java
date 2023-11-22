@@ -3,20 +3,20 @@ package com.guessinggame.controller;
 import com.guessinggame.model.gameModel;
 import com.guessinggame.view.gameView;
 
+import javax.net.ssl.SSLSocket;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class ClientHandler implements Runnable {
-    private final Socket connectionSocket;
+    private final SSLSocket connectionSocket;
     private gameModel gameInstance;
 
-    public ClientHandler(Socket connectionSocket) {
+    public ClientHandler(SSLSocket connectionSocket) {
         this.connectionSocket = connectionSocket;
     }
 
@@ -42,18 +42,18 @@ public class ClientHandler implements Runnable {
 
     private void handlePostRequest(HttpRequest request) throws IOException {
         String[] params = request.body.split("=");
-        this.gameInstance = HttpServer.getSession(request.getHeader("cookie"));
+        this.gameInstance = HttpsServer.getSession(request.getHeader("cookie"));
         String gameResponse = this.gameInstance.compareGuess(params[1]);
         String htmlResponse = gameView.getGamePage(gameResponse);
         httpRespond(htmlResponse, request);
         if (this.gameInstance.getWinStatus()) {
-            HttpServer.removeGameSession(this.gameInstance);
+            HttpsServer.removeGameSession(this.gameInstance);
         }
     }
 
     private void handleGetRequest(HttpRequest request) throws IOException {
         if (!"/favicon.ico".equals(request.path)) { // Ignore any additional request to retrieve the bookmark-icon.
-            this.gameInstance = HttpServer.getSession(request.getHeader("cookie"));
+            this.gameInstance = HttpsServer.getSession(request.getHeader("cookie"));
             String htmlResponse = gameView.getGamePage();
             httpRespond(htmlResponse, request);
         }
@@ -64,7 +64,7 @@ public class ClientHandler implements Runnable {
         PrintWriter out = new PrintWriter(connectionSocket.getOutputStream());
 
         // status line
-        out.println("HTTP/1.1 200 OK");
+        out.println("HTTPS/1.1 200 OK");
 
         // headers
         out.println("Content-Type: text/html; charset=UTF-8");

@@ -28,6 +28,11 @@
             <artifactId>ozark</artifactId>
             <version>1.0.0-m02</version>
         </dependency>
+        <dependency>
+            <groupId>com.oracle.database.security</groupId>
+            <artifactId>osdt_cert</artifactId>
+            <version>19.21.0.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
