@@ -9,50 +9,38 @@ public class SSLClient {
         SSLSocketFactory sf = (SSLSocketFactory) SSLSocketFactory.getDefault();
 
         HttpsURLConnection.setDefaultSSLSocketFactory(sf);
-        SSLSocket socket = null;
 
         String host = "webmail.kth.se";
-
-        try {
-            socket = (SSLSocket) sf.createSocket(host, 993); // default HTTPS port
-            socket.startHandshake();
-
-        } catch (MalformedURLException | IOException e) {
-            System.out.println(e.getMessage());
-        }
-
         PrintWriter writer = null;
         BufferedReader reader = null;
+        try (SSLSocket socket = (SSLSocket) sf.createSocket(host, 993)) { // default HTTPS port
 
-        try {
+            socket.startHandshake();
             writer = new PrintWriter(socket.getOutputStream());
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
 
-        int msgNum = 0;
-        Console console = System.console();
-        writer.println(msgNum++ + " LOGIN " + (console.readLine("Username: ")) + " "
-                + new String(console.readPassword("Password: ")));
-        writer.println("a" + msgNum++ + " select inbox");
-        writer.println("a" + msgNum++ + " search all");
-        writer.println("a" + msgNum++ + " fetch 1 body[header]");
-        writer.println("a" + msgNum++ + " fetch 1 body[text]");
-        writer.println("a" + msgNum++ + " logout");
-        writer.flush();
+            int msgNum = 0;
 
-        try {
-            String str;
-            while ((str = reader.readLine()) != null)
-                System.out.println(str);
+            Console console = System.console();
+            writer.println(msgNum++ + " LOGIN " + (console.readLine("Username: ")) + " "
+                    + new String(console.readPassword("Password: ")));
+            writer.println("a" + msgNum++ + " select inbox");
+            writer.println("a" + msgNum++ + " search all");
+            writer.println("a" + msgNum++ + " fetch 4 body[header]");
+            writer.println("a" + msgNum++ + " fetch 4 body[text]");
+            writer.println("a" + msgNum++ + " logout");
+            writer.flush();
+
+            String response;
+            while ((response = reader.readLine()) != null)
+                System.out.println(response);
             writer.close();
             reader.close();
 
+        } catch (MalformedURLException e) {
+            System.out.println(e.getMessage());
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-
-        socket.close();
     }
 }
