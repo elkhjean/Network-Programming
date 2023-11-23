@@ -1,8 +1,3 @@
-package com.guessinggame.controller;
-
-import com.guessinggame.model.gameModel;
-import com.guessinggame.view.gameView;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

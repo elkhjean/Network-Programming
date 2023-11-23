@@ -1,55 +1,27 @@
-package com.guessinggame.controller;
-
-import com.guessinggame.model.gameModel;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.security.KeyStore;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Base64;
 
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSocket;
-
 public class HttpServer {
-    static int port = 443;
+    static int port = 8080;
     static ArrayList<gameModel> gameSessions = new ArrayList<>();
     int cookieCtr;
 
     public static void main(String[] args) throws IOException {
+        if (args.length == 1)
+            port = Integer.parseInt(args[0]);
 
-        try {
-            KeyStore ks = KeyStore.getInstance("PKCS12");
-            InputStream is = new FileInputStream(new File("l2\\src\\main\\java\\com\\guessinggame\\controller\\myserverkeystore.pfx"));
-            char[] pwd = "qwerty".toCharArray();
-            System.out.println("Läser in certifikat");
-            ks.load(is, pwd);
-            System.out.println("Klart");
-            SSLContext ctx = SSLContext.getInstance("TLS");
-            KeyManagerFactory kmf = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-            kmf.init(ks, pwd);
-            // Motivera de tre parametrarna servernyckel,
-            ctx.init(kmf.getKeyManagers(), null, null);
-
-            SSLServerSocketFactory ssf = ctx.getServerSocketFactory();
-            SSLServerSocket ss = (SSLServerSocket) ssf.createServerSocket(443);
-            String[] cipher = { "TLS_RSA_WITH_AES_128_CBC_SHA" };
+        try (ServerSocket welcomeSocket = new ServerSocket(port)) {
+            System.out.println("Starting http server on port " + port);
 
             while (true) {
-                SSLSocket connectionSocket = (SSLSocket) ss.accept();
+                Socket connectionSocket = welcomeSocket.accept();
                 Runnable clientHandler = new ClientHandler(connectionSocket);
                 new Thread(clientHandler).start();
             }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-
         }
     }
 
