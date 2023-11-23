@@ -1,4 +1,3 @@
-package com.guessinggame.view;
 
 public class gameView {
 

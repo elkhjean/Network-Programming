@@ -1,4 +1,3 @@
-package com.guessinggame.model;
 
 import java.util.Random;
 
