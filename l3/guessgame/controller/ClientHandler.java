@@ -1,7 +1,3 @@
-package com.guessinggame.controller;
-
-import com.guessinggame.model.gameModel;
-import com.guessinggame.view.gameView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,18 +38,18 @@ public class ClientHandler implements Runnable {
 
     private void handlePostRequest(HttpRequest request) throws IOException {
         String[] params = request.body.split("=");
-        this.gameInstance = HttpServer.getSession(request.getHeader("cookie"));
+        this.gameInstance = SSLserver.getSession(request.getHeader("cookie"));
         String gameResponse = this.gameInstance.compareGuess(params[1]);
         String htmlResponse = gameView.getGamePage(gameResponse);
         httpRespond(htmlResponse, request);
         if (this.gameInstance.getWinStatus()) {
-            HttpServer.removeGameSession(this.gameInstance);
+            SSLserver.removeGameSession(this.gameInstance);
         }
     }
 
     private void handleGetRequest(HttpRequest request) throws IOException {
         if (!"/favicon.ico".equals(request.path)) { // Ignore any additional request to retrieve the bookmark-icon.
-            this.gameInstance = HttpServer.getSession(request.getHeader("cookie"));
+            this.gameInstance = SSLserver.getSession(request.getHeader("cookie"));
             String htmlResponse = gameView.getGamePage();
             httpRespond(htmlResponse, request);
         }
