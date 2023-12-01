@@ -2,8 +2,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 
-
-
     <!DOCTYPE html>
     <html>
 
@@ -19,7 +17,7 @@
         </form>
         <% 
         com.idunno.Model m=(com.idunno.Model)session.getAttribute("model"); 
-        out.println("Välkommen: " + m.getUsername());
+        out.println(m.getMessage());
         %>
    
     </body>
