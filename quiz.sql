@@ -1,12 +1,11 @@
 --DROP TABLE results;
 --DROP TABLE selector;
 --DROP TABLE questions;
---DROP TABLE users;
 --DROP TABLE quizzes;
+--DROP TABLE users;
 
-CONNECT 'jdbc:derby:test;create=true;user=stene;password=slask';
--- Utför kommandot ovan i Netbeans
-CONNECT 'jdbc:derby:test;user=stene;password=slask';
+
+
 CREATE TABLE users (
 	id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
 	username VARCHAR(32) UNIQUE NOT NULL,
@@ -47,8 +46,4 @@ CREATE TABLE results(
 	score INT NOT NULL
 );
 INSERT INTO results (user_id,quiz_id,score) VALUES (1,1,0);
-
-disconnect;
-exit;
-
 
