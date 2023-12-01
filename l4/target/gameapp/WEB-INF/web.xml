@@ -20,6 +20,16 @@
         <url-pattern>/quizz</url-pattern>
     </servlet-mapping>
 
+<!-- Quizz login Servlet -->
+    <servlet>
+        <servlet-name>QuizzLoginController</servlet-name>
+        <servlet-class>com.idunno.QuizzController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>QuizzLoginController</servlet-name>
+        <url-pattern>/quizzLogin</url-pattern>
+    </servlet-mapping>
+
 
 
     <session-config>
