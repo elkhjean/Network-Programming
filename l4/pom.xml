@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.idunno</groupId>
-    <artifactId>guessinggame</artifactId>
+    <artifactId>gameapp</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>GuessingGame Application</name>
+    <name>Game Application</name>
     <packaging>war</packaging>
 
     <properties>
@@ -36,7 +36,7 @@
     </dependencies>
 
         <build>
-        <finalName>guessinggame</finalName>
+        <finalName>gameapp</finalName>
 
         <plugins>
             <plugin>

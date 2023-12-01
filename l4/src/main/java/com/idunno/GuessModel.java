@@ -2,12 +2,12 @@ package com.idunno;
 
 import java.util.Random;
 
-public class Model {
+public class GuessModel {
     private int numberOfGuesses;
     private int secretNumber;
     private String message;
 
-    public Model() {
+    public GuessModel() {
         this.numberOfGuesses = 0;
         this.secretNumber = generateRandomNumber();
         this.message = "";
