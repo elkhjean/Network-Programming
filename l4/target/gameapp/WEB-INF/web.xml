@@ -23,7 +23,7 @@
 <!-- Quizz login Servlet -->
     <servlet>
         <servlet-name>QuizzLoginController</servlet-name>
-        <servlet-class>com.idunno.QuizzController</servlet-class>
+        <servlet-class>com.idunno.QuizzLoginController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>QuizzLoginController</servlet-name>
