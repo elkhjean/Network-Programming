@@ -18,7 +18,6 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-@WebServlet(name = "DBServlet", urlPatterns = { "/DBServlet" })
 public class PickQuizzController extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -31,10 +30,12 @@ public class PickQuizzController extends HttpServlet {
 
         HttpSession session = request.getSession();
         QuizzModel m = (QuizzModel) session.getAttribute("model");
-        if (m.getUserId() == null) {
-            RequestDispatcher rd = request.getRequestDispatcher("/QuizzLoginController");
-            rd.forward(request, response);
-        }
+        // if (m.getUserId() == null) {
+        // out.println("usr not found");
+        // RequestDispatcher rd = request.getRequestDispatcher("/QuizzLoginController");
+        // rd.forward(request, response);
+
+        // }
 
         try {
             Context initContext = new InitialContext();
@@ -49,9 +50,9 @@ public class PickQuizzController extends HttpServlet {
                 quizzes.add(rs.getString("subject"));
 
             }
-            request.setAttribute("Subjects", quizzes);
+            request.setAttribute("subjects", quizzes);
             request.setAttribute("ids", quizzesIDs);
-            RequestDispatcher rd = request.getRequestDispatcher("pickQuizzesView.jsp");
+            RequestDispatcher rd = request.getRequestDispatcher("pickQuizz.jsp");
             rd.forward(request, response);
         } catch (Exception e) {
             out.println(e.getMessage());
@@ -72,11 +73,11 @@ public class PickQuizzController extends HttpServlet {
             Connection conn = ds.getConnection();
             Statement stmt = conn.createStatement();
             String quString = m.getQuizzId();
-            ResultSet rs = stmt.executeQuery("select " + quString + "from selector");
+            ResultSet rs = stmt.executeQuery("select " + quString + " from selector");
             while (rs.next()) {
                 m.addQuestionId(rs.getString("question_id"));
             }
-            RequestDispatcher rd = request.getRequestDispatcher("/QuizzController");
+            RequestDispatcher rd = request.getRequestDispatcher("/quizz");
             rd.forward(request, response);
 
         } catch (Exception e) {

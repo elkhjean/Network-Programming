@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
-<!-- Guessing Game Servlet -->
+<web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    
+    <!-- Guessing Game Servlet -->
     <servlet>
         <servlet-name>GuessController</servlet-name>
         <servlet-class>com.idunno.GuessController</servlet-class>
@@ -10,7 +13,7 @@
         <url-pattern>/guessinggame</url-pattern>
     </servlet-mapping>
 
-<!-- Quizz Game Servlet -->
+    <!-- Quizz Game Servlet -->
     <servlet>
         <servlet-name>QuizzController</servlet-name>
         <servlet-class>com.idunno.QuizzController</servlet-class>
@@ -20,7 +23,17 @@
         <url-pattern>/quizz</url-pattern>
     </servlet-mapping>
 
-<!-- Quizz login Servlet -->
+    <!-- Pick Quizz Servlet -->
+    <servlet>
+        <servlet-name>PickQuizzController</servlet-name>
+        <servlet-class>com.idunno.PickQuizzController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PickQuizzController</servlet-name>
+        <url-pattern>/pickQuizz</url-pattern>
+    </servlet-mapping>
+
+    <!-- Quizz Login Servlet -->
     <servlet>
         <servlet-name>QuizzLoginController</servlet-name>
         <servlet-class>com.idunno.QuizzLoginController</servlet-class>
@@ -29,7 +42,6 @@
         <servlet-name>QuizzLoginController</servlet-name>
         <url-pattern>/quizzLogin</url-pattern>
     </servlet-mapping>
-
 
 
     <session-config>

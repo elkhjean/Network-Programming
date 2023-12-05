@@ -51,8 +51,7 @@ public class QuizzLoginController extends HttpServlet {
                 rd.forward(request, response);
             } else {
                 session.setAttribute("model", new QuizzModel(rs.getString("ID")));
-                RequestDispatcher rd = request.getRequestDispatcher("/ChooseQuizzController");
-                rd.forward(request, response);
+                response.sendRedirect("pickQuizz");
             }
         } catch (Exception e) {
             e.printStackTrace();
