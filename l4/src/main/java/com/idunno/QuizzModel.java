@@ -6,23 +6,27 @@ import java.util.Random;
 public class QuizzModel {
     private String userId;
     private String quizzId;
-    private ArrayList<Integer> questionIds;
+    private ArrayList<String> questionIds;
     private Question currentQuestion;
 
     public QuizzModel(String userId) {
         this.userId = userId;
     }
 
-    public int pickRandomQuestionId() {
+    public String pickRandomQuestionId() {
         Random ran = new Random();
         int i = ran.nextInt(questionIds.size());
-        int qId = questionIds.get(i);
+        String qId = questionIds.get(i);
         questionIds.remove(i);
         return qId;
     }
 
     public void setQuizzId(String quizId) {
         this.quizzId = quizId;
+    }
+
+    public void addQuestionId(String id) {
+        this.questionIds.add(id);
     }
 
     public boolean checkGuess(String guess) {
@@ -35,6 +39,8 @@ public class QuizzModel {
     public Question getQuestion() {
         return this.currentQuestion;
     }
+
+    private
 
     class Question {
         private String[] options;
@@ -65,5 +71,21 @@ public class QuizzModel {
             return questionId;
         }
 
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getQuizzId() {
+        return quizzId;
+    }
+
+    public ArrayList<String> getQuestionIds() {
+        return questionIds;
+    }
+
+    public Question getCurrentQuestion() {
+        return currentQuestion;
     }
 }
