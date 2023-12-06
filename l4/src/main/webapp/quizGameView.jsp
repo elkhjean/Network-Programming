@@ -9,7 +9,7 @@
     <body>
         <% if(request.getAttribute("msg") == null){ %>
             <%= request.getAttribute("text") %>
-            <form name="quizzForm" method="post">
+            <form name="quizForm" method="post">
                 <% String[] options=(String[]) request.getAttribute("options"); 
                 for(int i=0; i < options.length; i++) {
                     %>
@@ -20,7 +20,7 @@
                             <input type="submit" value="Submit">
             <% } else { %>
                 <%= request.getAttribute("msg")%>
-                <form action="quizz" method="GET">
+                <form action="quiz" method="GET">
                     <input type="submit" value="Next Question">
                 </form>
                 <% } %>

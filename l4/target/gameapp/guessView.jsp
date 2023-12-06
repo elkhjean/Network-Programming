@@ -16,7 +16,7 @@
             <input type="submit" value="Guess">
         </form>
         <% 
-        com.idunno.GuessModel m=(com.idunno.GuessModel)session.getAttribute("model"); 
+        com.idunno.GuessModel m=(com.idunno.GuessModel)session.getAttribute("guessModel"); 
         out.println(m.getMessage());
         %>
    

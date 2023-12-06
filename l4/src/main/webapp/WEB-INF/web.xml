@@ -13,34 +13,34 @@
         <url-pattern>/guessinggame</url-pattern>
     </servlet-mapping>
 
-    <!-- Quizz Game Servlet -->
+    <!-- Quiz Game Servlet -->
     <servlet>
-        <servlet-name>QuizzController</servlet-name>
-        <servlet-class>com.idunno.QuizzController</servlet-class>
+        <servlet-name>QuizController</servlet-name>
+        <servlet-class>com.idunno.QuizController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>QuizzController</servlet-name>
-        <url-pattern>/quizz</url-pattern>
+        <servlet-name>QuizController</servlet-name>
+        <url-pattern>/quiz</url-pattern>
     </servlet-mapping>
 
-    <!-- Pick Quizz Servlet -->
+    <!-- Quiz Selection Servlet -->
     <servlet>
-        <servlet-name>PickQuizzController</servlet-name>
-        <servlet-class>com.idunno.PickQuizzController</servlet-class>
+        <servlet-name>PickQuizController</servlet-name>
+        <servlet-class>com.idunno.PickQuizController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>PickQuizzController</servlet-name>
-        <url-pattern>/pickQuizz</url-pattern>
+        <servlet-name>PickQuizController</servlet-name>
+        <url-pattern>/chooseQuiz</url-pattern>
     </servlet-mapping>
 
-    <!-- Quizz Login Servlet -->
+    <!-- Quiz Login Servlet -->
     <servlet>
-        <servlet-name>QuizzLoginController</servlet-name>
-        <servlet-class>com.idunno.QuizzLoginController</servlet-class>
+        <servlet-name>QuizLoginController</servlet-name>
+        <servlet-class>com.idunno.QuizLoginController</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>QuizzLoginController</servlet-name>
-        <url-pattern>/quizzLogin</url-pattern>
+        <servlet-name>QuizLoginController</servlet-name>
+        <url-pattern>/quizLogin</url-pattern>
     </servlet-mapping>
 
 

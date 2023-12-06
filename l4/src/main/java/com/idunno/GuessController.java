@@ -14,8 +14,8 @@ public class GuessController extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 
         HttpSession session = request.getSession(true);
-        if (session.getAttribute("model") == null) {
-            session.setAttribute("model", new GuessModel());
+        if (session.getAttribute("guessModel") == null) {
+            session.setAttribute("guessModel", new GuessModel());
         }
 
         RequestDispatcher rd = request.getRequestDispatcher("guessView.jsp");
@@ -26,7 +26,7 @@ public class GuessController extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         HttpSession session = request.getSession();
 
-        GuessModel m = (GuessModel) session.getAttribute("model");
+        GuessModel m = (GuessModel) session.getAttribute("guessModel");
         m.compareGuess(request.getParameter("guess"));
 
         RequestDispatcher rd = request.getRequestDispatcher("guessView.jsp");
