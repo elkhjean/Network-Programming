@@ -10,7 +10,7 @@ public class QuizItem {
         this.subject = subject;
     }
 
-    public void setScore(String score) {
+    public void addScore(String score) {
         this.score = score;
     }
 

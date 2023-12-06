@@ -32,7 +32,7 @@ public class PickQuizController extends HttpServlet {
             ArrayList<QuizItem> qItems = new ArrayList<>();
 
             loadQuizzesFromDb(conn, qItems);
-            loadUserScoresFromDb((String) session.getAttribute("userId"), conn, qItems);
+            loadLatestUserScoresFromDb((String) session.getAttribute("userId"), conn, qItems);
 
             request.setAttribute("quizItems", qItems);
             RequestDispatcher rd = request.getRequestDispatcher("pickQuiz.jsp");
@@ -83,16 +83,17 @@ public class PickQuizController extends HttpServlet {
         }
     }
 
-    private void loadUserScoresFromDb(String userId, Connection conn, ArrayList<QuizItem> qItems)
+    private void loadLatestUserScoresFromDb(String userId, Connection conn, ArrayList<QuizItem> qItems)
             throws SQLException {
         for (QuizItem item : qItems) {
             try (PreparedStatement stmt = conn
-                    .prepareStatement("SELECT score FROM results WHERE user_id = ? AND quiz_id = ?")) {
+                    .prepareStatement(
+                            "SELECT score FROM results WHERE user_id = ? AND quiz_id = ? ORDER BY id DESC FETCH FIRST ROW ONLY")) {
                 stmt.setString(1, userId);
                 stmt.setString(2, item.getId());
                 ResultSet rs = stmt.executeQuery();
                 rs.next();
-                item.setScore((rs.getString("score")));
+                item.addScore((rs.getString("score")));
             }
         }
     }

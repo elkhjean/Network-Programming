@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import jakarta.persistence.*;
+
 public class QuizModel {
     private String userId;
     private String quizId;
@@ -13,19 +15,19 @@ public class QuizModel {
     private Question currentQuestion;
     private int score;
 
+    public QuizModel(String userId, String quizId) {
+        this.questionIds = new ArrayList<>();
+        this.userId = userId;
+        this.quizId = quizId;
+        this.score = 0;
+    }
+
     public String getScore() {
         return Integer.toString(this.score);
     }
 
     public void addToScore() {
         this.score++;
-    }
-
-    public QuizModel(String userId, String quizId) {
-        this.questionIds = new ArrayList<>();
-        this.userId = userId;
-        this.quizId = quizId;
-        this.score = 0;
     }
 
     public String pickRandomQuestionId() {
@@ -63,13 +65,26 @@ public class QuizModel {
     public void updateScoreToDb() throws SQLException {
         try (Connection conn = DatabaseUtility.getConnection();
                 PreparedStatement stmt = conn
-                        .prepareStatement("UPDATE results SET score = ? WHERE user_id = ? AND quiz_id = ?")) {
-            stmt.setString(1, getScore());
-            stmt.setString(2, getUserId());
-            stmt.setString(3, getQuizId());
+                        .prepareStatement("INSERT INTO results (user_id, quiz_id, score) VALUES (?, ?, ?)")) {
+            stmt.setString(1, getUserId());
+            stmt.setString(2, getQuizId());
+            stmt.setString(3, getScore());
             stmt.executeUpdate();
 
         }
+    }
+
+    public void updateWithJPA() {
+        Result result = new Result(Integer.valueOf(userId), Integer.valueOf(quizId), Integer.valueOf(score));
+        System.out.println(result.getQuizId() + "" + result.getScore() + "" + result.getUserId());
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistUnit");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        em.persist(result);
+        em.getTransaction().commit();
+        em.close();
+        emf.close();
+
     }
 
     private class Question {
