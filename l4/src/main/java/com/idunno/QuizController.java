@@ -29,8 +29,8 @@ public class QuizController extends HttpServlet {
         }
         if (model.isQuizCompleted()) {
             try {
-                 //model.updateScoreToDb();
-                model.updateWithJPA();
+                //model.updateScoreToDb();
+                 model.updateWithJPA();
             } catch (Exception e) {
                 out.println(e.getMessage());
             }

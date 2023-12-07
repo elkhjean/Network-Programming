@@ -75,12 +75,16 @@ public class QuizModel {
     }
 
     public void updateWithJPA() {
-        Result result = new Result(Integer.valueOf(userId), Integer.valueOf(quizId), Integer.valueOf(score));
+        Result result = new Result();
+        result.setQuizId(Integer.valueOf(quizId));
+        result.setUserId(Integer.valueOf(userId));
+        result.setScore(score);
         System.out.println(result.getQuizId() + "" + result.getScore() + "" + result.getUserId());
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("persistUnit");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(result);
+        em.flush();
         em.getTransaction().commit();
         em.close();
         emf.close();
