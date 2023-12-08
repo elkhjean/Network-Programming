@@ -17,6 +17,7 @@ public class QuizLoginController {
 
     @GetMapping("/quizLogin")
     public String getLoginPage() {
+        System.out.println("VI ÄR INNE I GET FÖRFAAAAAAAAAAAAAAAAAAAAAAAAN!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return "quizLoginView";
     }
 

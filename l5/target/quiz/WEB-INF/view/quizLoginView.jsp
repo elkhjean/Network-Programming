@@ -21,10 +21,6 @@
             <input type="submit" name="login" value="Login">
         </form>
 
-        <c:if test="${loginFailed}">
-            <p>Login failed. Please try again.</p>
-        </c:if>
-
     </body>
 
     </html>

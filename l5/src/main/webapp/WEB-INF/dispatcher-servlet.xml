@@ -7,12 +7,17 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <!-- Component scan to find all Spring components -->
+
+
+    <!-- Enable Spring MVC @Controller and @RequestMapping functionality -->
+    <annotation-driven />
+
+        <!-- Component scan to find all Spring components -->
     <context:component-scan base-package="com.idunno" />
 
     <!-- Define View Resolver -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/main/" />
+        <property name="prefix" value="/WEB-INF/view/" />
         <property name="suffix" value=".jsp" />
     </bean>
     

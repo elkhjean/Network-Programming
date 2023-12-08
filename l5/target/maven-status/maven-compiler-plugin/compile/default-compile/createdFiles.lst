@@ -1,7 +1,5 @@
-com\idunno\QuizController.class
 com\idunno\DatabaseUtility.class
 com\idunno\QuizItem.class
-com\idunno\PickQuizController.class
 com\idunno\Result.class
 com\idunno\QuizLoginController.class
 com\idunno\QuizModel.class
