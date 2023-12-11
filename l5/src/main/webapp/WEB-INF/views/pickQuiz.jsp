@@ -19,6 +19,8 @@
             String subject = quizItems.get(i).getSubject();
             String id = quizItems.get(i).getId();
             String score = quizItems.get(i).getScore();
+            if(score == null)
+                score = "";
         
             %>
             <form name="guessform_<%= i %>" method="post">

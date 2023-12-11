@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Controller
 @RequestMapping("/quiz")
-
 public class QuizController extends HttpServlet {
 
     @GetMapping
-    public String getGame(@SessionAttribute("userId") String userId, @SessionAttribute("quizModel") QuizModel qModel,
+    public String getGame(@SessionAttribute("userId") String userId, @SessionAttribute("user") String user,
+            @SessionAttribute("quizModel") QuizModel qModel,
             Model model) throws IOException, ServletException {
 
         if (userId == null) {
@@ -33,6 +33,8 @@ public class QuizController extends HttpServlet {
             try {
                 // qModel.updateScoreToDb();
                 qModel.updateWithJPA();
+                MailUtility.sendEmail(user, "Latest quiz score",
+                        "You scored: " + qModel.getScore() + " in your latest quiz!\n");
             } catch (Exception e) {
                 return "error" + e.getMessage();
             }

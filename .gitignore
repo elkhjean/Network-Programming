@@ -22,3 +22,6 @@
 # keystore #
 *.pfx
 l4/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+
+# properties #
+*.properties

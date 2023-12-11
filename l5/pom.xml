@@ -59,6 +59,13 @@
             <version>5.3.31</version>  
         </dependency>
 
+        <!-- Java mail dependancy -->
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>1.6.7</version>
+        </dependency>
+
         <!-- Other dependencies as needed -->
 
     </dependencies>

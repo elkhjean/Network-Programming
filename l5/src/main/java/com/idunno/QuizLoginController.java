@@ -13,8 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Controller
-@RequestMapping({"/quizLogin", "/"})
-@SessionAttributes("userId")
+@RequestMapping({ "/quizLogin", "/" })
+@SessionAttributes({ "userId", "user" })
 public class QuizLoginController {
 
     @GetMapping
@@ -34,6 +34,7 @@ public class QuizLoginController {
         }
         if (userId != null) {
             model.addAttribute("userId", userId);
+            model.addAttribute("user", username);
             return "redirect:/chooseQuiz";
         }
 

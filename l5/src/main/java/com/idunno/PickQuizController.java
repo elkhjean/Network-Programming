@@ -84,8 +84,11 @@ public class PickQuizController {
                 stmt.setString(1, userId);
                 stmt.setString(2, item.getId());
                 ResultSet rs = stmt.executeQuery();
-                rs.next();
-                item.addScore((rs.getString("score")));
+                if (rs.next())
+                    item.addScore((rs.getString("score")));
+                else
+                    item.addScore("0");
+
             }
         }
     }

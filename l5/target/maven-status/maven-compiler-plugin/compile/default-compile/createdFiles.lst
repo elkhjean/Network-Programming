@@ -4,5 +4,7 @@ com\idunno\QuizItem.class
 com\idunno\PickQuizController.class
 com\idunno\Result.class
 com\idunno\QuizLoginController.class
+com\idunno\MailUtility$1.class
 com\idunno\QuizModel.class
+com\idunno\MailUtility.class
 com\idunno\QuizModel$Question.class
