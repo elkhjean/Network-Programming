@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.idunno</groupId>
-    <artifactId>quiz</artifactId>
+    <artifactId>quizapp</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Game Application</name>
     <packaging>war</packaging>
@@ -15,27 +15,20 @@
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
-    <dependencies>
-        <!-- Spring MVC -->
+ <dependencies>
+        <!-- Servlet API Dependency -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>6.1.0</version>
-        </dependency>
-        
-        <!-- Servlet API Dependency (Updated for Spring) -->
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>5.0.0</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
 
         <!-- JSP API Dependency -->
         <dependency>
-            <groupId>jakarta.servlet.jsp</groupId>
-            <artifactId>jakarta.servlet.jsp-api</artifactId>
-            <version>3.1.0</version>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>javax.servlet.jsp-api</artifactId>
+            <version>2.3.3</version>
             <scope>provided</scope>
         </dependency>
 
@@ -46,7 +39,6 @@
             <version>3.1.0</version>
         </dependency>
 
-        <!-- Hibernate for JPA implementation -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
@@ -60,13 +52,19 @@
             <version>10.14.2.0</version>
         </dependency>
 
-        <!-- Other dependencies as needed -->
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->  
+        <dependency>  
+            <groupId>org.springframework</groupId>  
+            <artifactId>spring-webmvc</artifactId>  
+            <version>5.3.31</version>  
+        </dependency>
 
+        <!-- Other dependencies as needed -->
 
     </dependencies>
 
-    <build>
-        <finalName>quiz</finalName>
+        <build>
+        <finalName>quizapp</finalName>
 
         <plugins>
             <plugin>

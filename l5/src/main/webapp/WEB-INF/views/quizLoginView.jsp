@@ -21,6 +21,10 @@
             <input type="submit" name="login" value="Login">
         </form>
 
+        <% if (request.getAttribute("loginFailed") !=null && (Boolean) request.getAttribute("loginFailed")) { %>
+            <p>Login failed. Please try again.</p>
+            <% } %>
+
     </body>
 
     </html>
